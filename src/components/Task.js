@@ -8,22 +8,37 @@ import 'moment/locale/pt-br';
 import globalStyles from './../globalStyles';
 
 export default function Task(props) {
-  const formatedDate = moment(props.doneAt)
+  const item = props.item;
+
+  const formatedDate = moment(item.doneAt)
     .locale('pt-br')
     .format('ddd[,] D [de] MMMM');
 
   function isDone() {
-    return props.doneAt !== undefined && props.doneAt !== null;
+    return item.doneAt !== undefined && item.doneAt !== null;
   }
 
   function getStatusIcon() {
     if (isDone()) {
       return (
-        <Icon name="check-circle" size={20} solid={true} color="#4d7031" />
+        <Icon
+          name="check-circle"
+          size={20}
+          solid={true}
+          color="#4d7031"
+          onPress={() => props.markAsDone(item)}
+        />
       );
     }
 
-    return <Icon name="circle" size={20} color="#aaa" />;
+    return (
+      <Icon
+        name="circle"
+        size={20}
+        color="#aaa"
+        onPress={() => props.markAsDone(item)}
+      />
+    );
   }
 
   function getTextDecoration() {
@@ -33,7 +48,7 @@ export default function Task(props) {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={[styles.dataText, getTextDecoration()]}>{props.desc}</Text>
+        <Text style={[styles.dataText, getTextDecoration()]}>{item.desc}</Text>
         <Text style={styles.dataTextSmall}>
           {isDone() ? formatedDate : 'Não concluído'}
         </Text>

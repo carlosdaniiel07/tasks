@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
@@ -21,7 +21,7 @@ export default function TaskList() {
     .locale('pt-br')
     .format('ddd, D [de] MMMM');
 
-  const tasks = [
+  const [tasks, setTasks] = useState([
     {id: 1, desc: 'Tarefa #1', doneAt: new Date()},
     {id: 2, desc: 'Tarefa #2', doneAt: new Date()},
     {id: 3, desc: 'Tarefa #3', doneAt: new Date()},
@@ -31,7 +31,19 @@ export default function TaskList() {
     {id: 7, desc: 'Tarefa #7', doneAt: null},
     {id: 8, desc: 'Tarefa #8', doneAt: null},
     {id: 9, desc: 'Tarefa #9', doneAt: null},
-  ];
+  ]);
+
+  function markAsDone(task) {
+    const newTasks = [...tasks];
+
+    newTasks.forEach(t => {
+      if (t === task) {
+        t.doneAt = t.doneAt ? null : new Date();
+      }
+    });
+
+    setTasks(newTasks);
+  }
 
   return (
     <>
@@ -50,7 +62,9 @@ export default function TaskList() {
             showsVerticalScrollIndicator={true}
             data={tasks}
             keyExtractor={item => String(item.id)}
-            renderItem={({item}) => <Task {...item} />}
+            renderItem={({item}) => (
+              <Task item={item} markAsDone={markAsDone} />
+            )}
           />
         </View>
       </View>
