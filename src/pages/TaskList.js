@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -6,8 +6,11 @@ import {
   StatusBar,
   FlatList,
   StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 
+import Icon from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
@@ -32,6 +35,24 @@ export default function TaskList() {
     {id: 8, desc: 'Tarefa #8', doneAt: null},
     {id: 9, desc: 'Tarefa #9', doneAt: null},
   ]);
+  const [visibleTasks, setVisibleTasks] = useState(tasks);
+  const [showDoneTasks, setShowDoneTasks] = useState(false);
+
+  useEffect(() => {
+    const filterTasks = () => {
+      if (showDoneTasks) {
+        setVisibleTasks(tasks);
+      } else {
+        setVisibleTasks(tasks.filter(task => !task.doneAt));
+      }
+    };
+
+    filterTasks();
+  }, [showDoneTasks, tasks]);
+
+  function toggleFilter() {
+    setShowDoneTasks(!showDoneTasks);
+  }
 
   function markAsDone(task) {
     const newTasks = [...tasks];
@@ -48,10 +69,20 @@ export default function TaskList() {
   return (
     <>
       <StatusBar hidden={true} />
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <ImageBackground
           source={backgroundImage}
           style={styles.backgroundImage}>
+          <View style={styles.iconContainer}>
+            <TouchableOpacity onPress={toggleFilter} activeOpacity={0.7}>
+              <Icon
+                name={showDoneTasks ? 'eye' : 'eye-off'}
+                size={20}
+                color={globalStyles.colors.secondary}
+              />
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.headerContainer}>
             <Text style={styles.headerTitle}>Hoje</Text>
             <Text style={styles.headerDescription}>{today}</Text>
@@ -60,14 +91,14 @@ export default function TaskList() {
         <View style={styles.tasksContainer}>
           <FlatList
             showsVerticalScrollIndicator={true}
-            data={tasks}
+            data={visibleTasks}
             keyExtractor={item => String(item.id)}
             renderItem={({item}) => (
               <Task item={item} markAsDone={markAsDone} />
             )}
           />
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
@@ -79,6 +110,11 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 2,
     padding: 8,
+  },
+  iconContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   headerContainer: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
@@ -21,24 +21,11 @@ export default function Task(props) {
   function getStatusIcon() {
     if (isDone()) {
       return (
-        <Icon
-          name="check-circle"
-          size={20}
-          solid={true}
-          color="#4d7031"
-          onPress={() => props.markAsDone(item)}
-        />
+        <Icon name="check-circle" size={20} solid={true} color="#4d7031" />
       );
     }
 
-    return (
-      <Icon
-        name="circle"
-        size={20}
-        color="#aaa"
-        onPress={() => props.markAsDone(item)}
-      />
-    );
+    return <Icon name="circle" size={20} color="#aaa" />;
   }
 
   function getTextDecoration() {
@@ -53,7 +40,13 @@ export default function Task(props) {
           {isDone() ? formatedDate : 'Não concluído'}
         </Text>
       </View>
-      <View style={styles.statusContainer}>{getStatusIcon()}</View>
+      <View style={styles.statusContainer}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => props.markAsDone(item)}>
+          {getStatusIcon()}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
