@@ -48,7 +48,7 @@ export default function TaskList() {
     };
 
     filterTasks();
-  }, [showDoneTasks, tasks]);
+  }, [showDoneTasks]);
 
   function toggleFilter() {
     setShowDoneTasks(!showDoneTasks);
