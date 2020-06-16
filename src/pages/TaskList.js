@@ -52,7 +52,7 @@ export default function TaskList() {
     };
 
     filterTasks();
-  }, [showDoneTasks]);
+  }, [showDoneTasks, tasks]);
 
   function toggleFilter() {
     setShowDoneTasks(!showDoneTasks);
@@ -76,6 +76,14 @@ export default function TaskList() {
     newTasks.push(task);
 
     setShowAddTask(false);
+    setTasks(newTasks);
+  }
+
+  function deleteTask(task) {
+    const newTasks = [...tasks];
+
+    newTasks.splice(newTasks.indexOf(task), 1);
+
     setTasks(newTasks);
   }
 
@@ -116,7 +124,7 @@ export default function TaskList() {
             data={visibleTasks}
             keyExtractor={item => String(item.id)}
             renderItem={({item}) => (
-              <Task item={item} markAsDone={markAsDone} />
+              <Task item={item} markAsDone={markAsDone} onDelete={deleteTask} />
             )}
           />
         </View>

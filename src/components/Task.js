@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -32,22 +33,37 @@ export default function Task(props) {
     return isDone() ? {textDecorationLine: 'line-through'} : {};
   }
 
+  function getSwipeableContent() {
+    return (
+      <View style={styles.swipeableContent}>
+        <Icon name="trash-alt" size={20} color="#fff" />
+        <Text style={styles.swipeableText}>Excluir</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <View>
-        <Text style={[styles.dataText, getTextDecoration()]}>{item.desc}</Text>
-        <Text style={styles.dataTextSmall}>
-          {isDone() ? formatedDate : 'Não concluído'}
-        </Text>
+    <Swipeable
+      renderLeftActions={getSwipeableContent}
+      onSwipeableLeftOpen={() => props.onDelete(item)}>
+      <View style={styles.container}>
+        <View>
+          <Text style={[styles.dataText, getTextDecoration()]}>
+            {item.desc}
+          </Text>
+          <Text style={styles.dataTextSmall}>
+            {isDone() ? formatedDate : 'Não concluído'}
+          </Text>
+        </View>
+        <View style={styles.statusContainer}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => props.markAsDone(item)}>
+            {getStatusIcon()}
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.statusContainer}>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => props.markAsDone(item)}>
-          {getStatusIcon()}
-        </TouchableOpacity>
-      </View>
-    </View>
+    </Swipeable>
   );
 }
 
@@ -55,10 +71,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     borderBottomColor: '#aaa',
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.6,
     padding: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: '#fff',
   },
   statusContainer: {
     width: '12%',
@@ -73,5 +90,18 @@ const styles = StyleSheet.create({
     fontFamily: globalStyles.fontFamily,
     fontSize: 11,
     color: globalStyles.colors.smallText,
+  },
+  swipeableContent: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    backgroundColor: '#dc1515',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  swipeableText: {
+    fontFamily: globalStyles.fontFamily,
+    color: '#fff',
+    marginLeft: 10,
   },
 });
