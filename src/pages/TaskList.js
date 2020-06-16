@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
 import Icon from 'react-native-vector-icons/Feather';
 
 import moment from 'moment';
@@ -25,22 +27,21 @@ export default function TaskList() {
     .locale('pt-br')
     .format('ddd[,] D [de] MMMM');
 
-  const [tasks, setTasks] = useState([
-    {id: 1, desc: 'Tarefa #1', doneAt: new Date()},
-    {id: 2, desc: 'Tarefa #2', doneAt: new Date()},
-    {id: 3, desc: 'Tarefa #3', doneAt: new Date()},
-    {id: 4, desc: 'Tarefa #4', doneAt: null},
-    {id: 5, desc: 'Tarefa #5', doneAt: null},
-    {id: 6, desc: 'Tarefa #6', doneAt: null},
-    {id: 7, desc: 'Tarefa #7', doneAt: null},
-    {id: 8, desc: 'Tarefa #8', doneAt: null},
-    {id: 9, desc: 'Tarefa #9', doneAt: null},
-  ]);
+  const [tasks, setTasks] = useState([]);
 
   // states
   const [visibleTasks, setVisibleTasks] = useState(tasks);
   const [showDoneTasks, setShowDoneTasks] = useState(false);
   const [showAddTask, setShowAddTask] = useState(false);
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      const data = JSON.parse(await AsyncStorage.getItem('@tasks'));
+      setTasks(data || []);
+    };
+
+    loadTasks();
+  }, []);
 
   useEffect(() => {
     const filterTasks = () => {
@@ -51,7 +52,12 @@ export default function TaskList() {
       }
     };
 
+    const persistTasks = () => {
+      AsyncStorage.setItem('@tasks', JSON.stringify(tasks));
+    };
+
     filterTasks();
+    persistTasks();
   }, [showDoneTasks, tasks]);
 
   function toggleFilter() {
