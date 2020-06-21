@@ -11,12 +11,8 @@ import globalStyles from './../globalStyles';
 export default function Task(props) {
   const item = props.item;
 
-  const formatedDate = moment(item.doneAt)
-    .locale('pt-br')
-    .format('ddd[,] D [de] MMMM');
-
   function isDone() {
-    return item.doneAt !== undefined && item.doneAt !== null;
+    return item.done_date !== null;
   }
 
   function getStatusIcon() {
@@ -29,8 +25,22 @@ export default function Task(props) {
     return <Icon name="circle" size={20} color="#aaa" />;
   }
 
+  function getTaskHelper() {
+    const date = isDone() ? item.done_date : item.estimate_date;
+    return moment(date)
+      .locale('pt-br')
+      .format('ddd[,] D [de] MMMM');
+  }
+
   function getTextDecoration() {
     return isDone() ? {textDecorationLine: 'line-through'} : {};
+  }
+
+  function getTaskDescription() {
+    const maxChars = 38;
+    return item.description.length > maxChars
+      ? item.description.substring(0, maxChars) + '...'
+      : item.description;
   }
 
   function getSwipeableContent() {
@@ -49,11 +59,9 @@ export default function Task(props) {
       <View style={styles.container}>
         <View>
           <Text style={[styles.dataText, getTextDecoration()]}>
-            {item.desc}
+            {getTaskDescription()}
           </Text>
-          <Text style={styles.dataTextSmall}>
-            {isDone() ? formatedDate : 'Não concluído'}
-          </Text>
+          <Text style={styles.dataTextSmall}>{getTaskHelper()}</Text>
         </View>
         <View style={styles.statusContainer}>
           <TouchableOpacity

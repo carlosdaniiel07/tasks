@@ -9,13 +9,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
 
 import Icon from 'react-native-vector-icons/Feather';
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
+import api from './../services/api';
 import globalStyles from './../globalStyles';
 import backgroundImage from './../../assets/images/today.jpg';
 
@@ -36,7 +37,7 @@ export default function TaskList() {
 
   useEffect(() => {
     const loadTasks = async () => {
-      const data = JSON.parse(await AsyncStorage.getItem('@tasks'));
+      const data = (await api.get('/tasks')).data;
       setTasks(data || []);
     };
 
@@ -48,12 +49,12 @@ export default function TaskList() {
       if (showDoneTasks) {
         setVisibleTasks(tasks);
       } else {
-        setVisibleTasks(tasks.filter(task => !task.doneAt));
+        setVisibleTasks(tasks.filter(task => !task.done_date));
       }
     };
 
     const persistTasks = () => {
-      AsyncStorage.setItem('@tasks', JSON.stringify(tasks));
+      // AsyncStorage.setItem('@tasks', JSON.stringify(tasks));
     };
 
     filterTasks();
@@ -69,17 +70,24 @@ export default function TaskList() {
 
     newTasks.forEach(t => {
       if (t === task) {
-        t.doneAt = t.doneAt ? null : new Date();
+        t.done_date = t.done_date ? null : new Date();
       }
     });
+
+    api.put(`/tasks/${task.id}/done`);
 
     setTasks(newTasks);
   }
 
-  function saveTask(task) {
+  async function saveTask(task) {
     const newTasks = [...tasks];
+    const newTask = (await api.post('/tasks', JSON.stringify(task), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })).data;
 
-    newTasks.push(task);
+    newTasks.push(newTask);
 
     setShowAddTask(false);
     setTasks(newTasks);
@@ -89,6 +97,8 @@ export default function TaskList() {
     const newTasks = [...tasks];
 
     newTasks.splice(newTasks.indexOf(task), 1);
+
+    api.delete(`/tasks/${task.id}`);
 
     setTasks(newTasks);
   }

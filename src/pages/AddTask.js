@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -21,8 +21,17 @@ export default function AddTask(props) {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   function saveTask() {
-    const task = {id: 10, desc: text, doneAt: null};
+    const task = {
+      description: text,
+      estimateDate: date.toJSON(),
+      notify: true,
+    };
+
     props.onSave(task);
+
+    // clear state (text inputs)
+    setText(null);
+    setDate(new Date());
   }
 
   function getDatePicker() {
