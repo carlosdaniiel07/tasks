@@ -6,13 +6,13 @@ import {
   Text,
   ImageBackground,
   StyleSheet,
-  Alert,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 
 import Input from './../components/Input';
 
+import {showAlert} from './../utils/utils';
 import {api} from './../services/api';
 import backgroundImage from './../../assets/images/login.jpg';
 import globalStyles from './../styles/globalStyles';
@@ -34,13 +34,16 @@ export default function Register() {
     };
 
     api
-      .post('/sign-up', JSON.stringify(data))
+      .post('/sign-up', data)
       .then(() => {
-        Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+        showAlert('Sucesso', 'Cadastro realizado com sucesso!');
         navigator.goBack();
       })
-      .catch(() => {
-        Alert.alert('Erro', 'Ocorreu um erro ao realizar o cadastro');
+      .catch(err => {
+        const message =
+          err.response.data.message || 'Ocorreu um erro ao realizar o cadastro';
+
+        showAlert('Erro', message);
         clearForm();
       });
   }

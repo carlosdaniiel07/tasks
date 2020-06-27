@@ -6,7 +6,6 @@ import {
   Text,
   ImageBackground,
   StyleSheet,
-  Alert,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -14,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import Input from './../components/Input';
 
 import {api, setToken} from './../services/api';
+import {showAlert} from './../utils/utils';
 import backgroundImage from './../../assets/images/login.jpg';
 import globalStyles from './../styles/globalStyles';
 
@@ -36,8 +36,10 @@ export default function Login() {
 
         navigator.navigate('TaskList');
       })
-      .catch(() => {
-        Alert.alert('Erro', 'Usuário ou senha incorretos!');
+      .catch(err => {
+        const message =
+          err.response.data.message || 'Ocorreu um erro ao fazer o login';
+        showAlert('Erro', message);
       });
   }
 
