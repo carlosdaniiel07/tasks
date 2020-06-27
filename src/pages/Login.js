@@ -30,7 +30,7 @@ export default function Login() {
     };
 
     api
-      .post('/auth', JSON.stringify(auth))
+      .post('/auth', auth)
       .then(res => {
         setToken(res.data.accessToken);
         navigator.navigate('TaskList');
