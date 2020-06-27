@@ -16,8 +16,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
-import api from './../services/api';
-import globalStyles from './../globalStyles';
+import {api, getAuthHeader} from './../services/api';
+import globalStyles from './../styles/globalStyles';
 import backgroundImage from './../../assets/images/today.jpg';
 
 import Task from './../components/Task';
@@ -37,7 +37,9 @@ export default function TaskList() {
 
   useEffect(() => {
     const loadTasks = async () => {
-      const data = (await api.get('/tasks')).data;
+      const data = (await api.get('/tasks', {
+        headers: getAuthHeader(),
+      })).data;
       setTasks(data || []);
     };
 
@@ -74,7 +76,9 @@ export default function TaskList() {
       }
     });
 
-    api.put(`/tasks/${task.id}/done`);
+    api.put(`/tasks/${task.id}/done`, null, {
+      headers: getAuthHeader(),
+    });
 
     setTasks(newTasks);
   }
@@ -82,9 +86,7 @@ export default function TaskList() {
   async function saveTask(task) {
     const newTasks = [...tasks];
     const newTask = (await api.post('/tasks', JSON.stringify(task), {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getAuthHeader(),
     })).data;
 
     newTasks.push(newTask);
@@ -98,7 +100,9 @@ export default function TaskList() {
 
     newTasks.splice(newTasks.indexOf(task), 1);
 
-    api.delete(`/tasks/${task.id}`);
+    api.delete(`/tasks/${task.id}`, {
+      headers: getAuthHeader(),
+    });
 
     setTasks(newTasks);
   }

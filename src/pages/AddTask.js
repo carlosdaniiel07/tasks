@@ -13,7 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 
-import globalStyles from '../globalStyles';
+import globalStyles from './../styles/globalStyles';
 
 export default function AddTask(props) {
   const [text, setText] = useState(null);

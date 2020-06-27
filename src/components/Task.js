@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
-import globalStyles from './../globalStyles';
+import globalStyles from './../styles/globalStyles';
 
 export default function Task(props) {
   const item = props.item;
