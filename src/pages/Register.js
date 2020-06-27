@@ -76,6 +76,9 @@ export default function Register() {
             placeholder="E-mail"
             value={email}
             onChangeText={value => setEmail(value)}
+            autoCapitalize="none"
+            autoCompleteType="email"
+            keyboardType="email-address"
           />
           <Input
             icon="lock"
@@ -83,6 +86,7 @@ export default function Register() {
             secureTextEntry={true}
             value={password}
             onChangeText={value => setPassword(value)}
+            autoCapitalize="none"
           />
         </View>
 

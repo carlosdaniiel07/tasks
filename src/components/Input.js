@@ -7,7 +7,7 @@ import globalStyles from './../styles/globalStyles';
 export default function Input(props) {
   return (
     <View style={styles.container}>
-      <Icon name={props.icon} size={18} />
+      <Icon name={props.icon} color="#333" size={18} />
       <TextInput style={[styles.input, props.style]} {...props} />
     </View>
   );

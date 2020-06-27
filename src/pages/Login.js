@@ -64,6 +64,7 @@ export default function Login() {
             secureTextEntry={true}
             value={password}
             onChangeText={value => setPassword(value)}
+            autoCapitalize="none"
           />
         </View>
 
