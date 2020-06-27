@@ -33,7 +33,6 @@ export default function Login() {
       .post('/auth', JSON.stringify(auth))
       .then(res => {
         setToken(res.data.accessToken);
-
         navigator.navigate('TaskList');
       })
       .catch(err => {

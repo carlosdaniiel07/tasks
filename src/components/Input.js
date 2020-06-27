@@ -26,5 +26,6 @@ const styles = StyleSheet.create({
   },
   input: {
     marginLeft: 5,
+    width: '90%',
   },
 });
