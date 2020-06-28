@@ -70,7 +70,10 @@ export default function Login() {
         </View>
 
         <TouchableOpacity
-          style={styles.loginButton}
+          style={[
+            styles.loginButton,
+            !login || !password ? styles.disabledLoginButton : {},
+          ]}
           activeOpacity={0.9}
           disabled={!login || !password}
           onPress={tryLogin}>
@@ -118,6 +121,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  disabledLoginButton: {
+    backgroundColor: '#aaa',
   },
   loginText: {
     color: globalStyles.colors.secondary,

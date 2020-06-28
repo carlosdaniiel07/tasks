@@ -94,7 +94,12 @@ export default function Register() {
         </View>
 
         <TouchableOpacity
-          style={styles.registerButton}
+          style={[
+            styles.registerButton,
+            !name || !login || !email || !password
+              ? styles.disabledRegisterButton
+              : {},
+          ]}
           activeOpacity={0.9}
           disabled={!name || !login || !email || !password}
           onPress={signUp}>
@@ -146,6 +151,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  disabledRegisterButton: {
+    backgroundColor: '#aaa',
   },
   registerText: {
     color: globalStyles.colors.secondary,
