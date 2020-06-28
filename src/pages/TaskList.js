@@ -18,15 +18,48 @@ import 'moment/locale/pt-br';
 
 import {api, getAuthHeader} from './../services/api';
 import globalStyles from './../styles/globalStyles';
-import backgroundImage from './../../assets/images/today.jpg';
+
+import todayImage from './../../assets/images/today.jpg';
+import tomorrowImage from './../../assets/images/tomorrow.jpg';
+import weekImage from './../../assets/images/week.jpg';
+import monthImage from './../../assets/images/month.jpg';
 
 import Task from './../components/Task';
 import AddTask from './AddTask';
 
-export default function TaskList({navigation}) {
-  const today = moment()
-    .locale('pt-br')
-    .format('ddd[,] D [de] MMMM');
+export default function TaskList({navigation, route}) {
+  const {params} = route;
+
+  const today = moment().locale('pt-br');
+
+  const pages = [
+    {
+      name: 'today',
+      header: 'Hoje',
+      backgroundImage: todayImage,
+      date: today.format('ddd[,] D [de] MMMM'),
+    },
+    {
+      name: 'tomorrow',
+      header: 'Amanhã',
+      backgroundImage: tomorrowImage,
+      date: today.add(1, 'day').format('ddd[,] D [de] MMMM'),
+    },
+    {
+      name: 'week',
+      header: 'Semana',
+      backgroundImage: weekImage,
+      date: '',
+    },
+    {
+      name: 'month',
+      header: 'Mês',
+      backgroundImage: monthImage,
+      date: '',
+    },
+  ];
+
+  const pageData = pages.find(page => page.name === params.name);
 
   const [tasks, setTasks] = useState([]);
 
@@ -121,7 +154,7 @@ export default function TaskList({navigation}) {
         />
 
         <ImageBackground
-          source={backgroundImage}
+          source={pageData.backgroundImage}
           style={styles.backgroundImage}>
           <View style={styles.iconContainer}>
             <TouchableOpacity
@@ -143,8 +176,8 @@ export default function TaskList({navigation}) {
           </View>
 
           <View style={styles.headerContainer}>
-            <Text style={styles.headerTitle}>Hoje</Text>
-            <Text style={styles.headerDescription}>{today}</Text>
+            <Text style={styles.headerTitle}>{pageData.header}</Text>
+            <Text style={styles.headerDescription}>{pageData.date}</Text>
           </View>
         </ImageBackground>
         <View style={styles.tasksContainer}>
