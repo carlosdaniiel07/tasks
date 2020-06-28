@@ -78,8 +78,8 @@ export default function Task(props) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    borderBottomColor: '#aaa',
-    borderBottomWidth: 0.6,
+    borderTopColor: '#aaa',
+    borderTopWidth: 0.7,
     padding: 8,
     alignItems: 'center',
     justifyContent: 'space-between',
