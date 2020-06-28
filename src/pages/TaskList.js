@@ -23,7 +23,7 @@ import backgroundImage from './../../assets/images/today.jpg';
 import Task from './../components/Task';
 import AddTask from './AddTask';
 
-export default function TaskList() {
+export default function TaskList({navigation}) {
   const today = moment()
     .locale('pt-br')
     .format('ddd[,] D [de] MMMM');
@@ -124,6 +124,15 @@ export default function TaskList() {
           source={backgroundImage}
           style={styles.backgroundImage}>
           <View style={styles.iconContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.openDrawer()}
+              activeOpacity={0.7}>
+              <Icon
+                name="menu"
+                size={20}
+                color={globalStyles.colors.secondary}
+              />
+            </TouchableOpacity>
             <TouchableOpacity onPress={toggleFilter} activeOpacity={0.7}>
               <Icon
                 name={showDoneTasks ? 'eye' : 'eye-off'}
@@ -171,7 +180,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
   headerContainer: {
     flex: 1,
