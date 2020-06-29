@@ -74,9 +74,16 @@ export default function TaskList({navigation, route}) {
 
   useEffect(() => {
     const loadTasks = async () => {
+      const {minDate, maxDate} = getDateRange();
+
       const data = (await api.get('/tasks', {
         headers: getAuthHeader(),
+        params: {
+          minDate,
+          maxDate,
+        },
       })).data;
+
       setTasks(data || []);
     };
 
@@ -146,6 +153,33 @@ export default function TaskList({navigation, route}) {
 
   function closeAddTaskModal() {
     setShowAddTask(false);
+  }
+
+  function getDateRange() {
+    const minDate = moment().toJSON();
+    let maxDate;
+
+    switch (pageData.name) {
+      case 'today':
+        maxDate = moment().toJSON();
+        break;
+      case 'tomorrow':
+        maxDate = moment()
+          .add(1, 'day')
+          .toJSON();
+        break;
+      case 'week':
+        maxDate = moment()
+          .add(1, 'week')
+          .toJSON();
+        break;
+      default:
+        maxDate = moment()
+          .add(1, 'month')
+          .toJSON();
+    }
+
+    return {minDate, maxDate};
   }
 
   return (
