@@ -38,24 +38,28 @@ export default function TaskList({navigation, route}) {
       header: 'Hoje',
       backgroundImage: todayImage,
       date: today.format('ddd[,] D [de] MMMM'),
+      theme: globalStyles.colors.theme.today,
     },
     {
       name: 'tomorrow',
       header: 'Amanhã',
       backgroundImage: tomorrowImage,
       date: today.add(1, 'day').format('ddd[,] D [de] MMMM'),
+      theme: globalStyles.colors.theme.tomorrow,
     },
     {
       name: 'week',
       header: 'Semana',
       backgroundImage: weekImage,
       date: '',
+      theme: globalStyles.colors.theme.week,
     },
     {
       name: 'month',
       header: 'Mês',
       backgroundImage: monthImage,
       date: '',
+      theme: globalStyles.colors.theme.month,
     },
   ];
 
@@ -192,7 +196,7 @@ export default function TaskList({navigation, route}) {
         </View>
 
         <TouchableOpacity
-          style={styles.addButton}
+          style={[styles.addButton, {backgroundColor: pageData.theme}]}
           activeOpacity={0.8}
           onPress={() => setShowAddTask(true)}>
           <Icon name="plus" size={22} color={globalStyles.colors.secondary} />
@@ -205,6 +209,7 @@ export default function TaskList({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   backgroundImage: {
     flex: 2,
@@ -239,7 +244,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: globalStyles.colors.today,
     justifyContent: 'center',
     alignItems: 'center',
   },

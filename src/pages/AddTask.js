@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   header: {},
   headerText: {
-    backgroundColor: globalStyles.colors.today,
+    backgroundColor: globalStyles.colors.theme.today,
     color: globalStyles.colors.secondary,
     fontFamily: globalStyles.fontFamily,
     padding: 10,
@@ -153,6 +153,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: globalStyles.fontFamily,
-    color: globalStyles.colors.today,
+    color: globalStyles.colors.theme.today,
   },
 });
