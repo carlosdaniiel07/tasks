@@ -189,6 +189,7 @@ export default function TaskList({navigation, route}) {
           visible={showAddTask}
           onCancel={closeAddTaskModal}
           onSave={saveTask}
+          theme={pageData.theme}
         />
 
         <ImageBackground
