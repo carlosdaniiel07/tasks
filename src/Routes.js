@@ -1,10 +1,18 @@
 import React from 'react';
+import {StyleSheet, View, Image} from 'react-native';
 
+import {useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 
 import Icon from 'react-native-vector-icons/Feather';
 
+import userImage from './../assets/images/user.png';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import TaskList from './pages/TaskList';
@@ -12,6 +20,13 @@ import globalStyles from './styles/globalStyles';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+
+const itemStyles = StyleSheet.create({
+  item: {
+    fontFamily: globalStyles.fontFamily,
+    color: '#000',
+  },
+});
 
 export default function Routes() {
   return (
@@ -26,13 +41,11 @@ export default function Routes() {
 function TaskListDrawer() {
   return (
     <Drawer.Navigator
+      drawerContent={props => <CustomDrawerContent {...props} />}
       initialRouteName="Today"
       drawerContentOptions={{
         activeTintColor: '#aaa',
-        labelStyle: {
-          fontFamily: globalStyles.fontFamily,
-          color: '#000',
-        },
+        labelStyle: itemStyles.item,
       }}>
       <Drawer.Screen
         name="Today"
@@ -79,5 +92,38 @@ function TaskListDrawer() {
         }}
       />
     </Drawer.Navigator>
+  );
+}
+
+function CustomDrawerContent(props) {
+  const navigation = useNavigation();
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: '#eaeaea',
+    },
+    header: {
+      padding: 10,
+      alignItems: 'center',
+    },
+    headerImage: {
+      width: 50,
+      height: 50,
+    },
+  });
+
+  return (
+    <DrawerContentScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Image style={styles.headerImage} source={userImage} />
+      </View>
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Logout"
+        labelStyle={itemStyles.item}
+        icon={() => <Icon name="log-out" size={20} />}
+        onPress={() => navigation.navigate('Login')}
+      />
+    </DrawerContentScrollView>
   );
 }
