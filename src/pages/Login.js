@@ -34,7 +34,9 @@ export default function Login() {
       .then(res => {
         clearForm();
         setToken(res.data.accessToken);
+
         navigator.navigate('TaskList');
+        clearNavigationStack();
       })
       .catch(err => {
         const message =
@@ -46,6 +48,13 @@ export default function Login() {
 
   function navigateToRegister() {
     navigator.navigate('Register');
+  }
+
+  function clearNavigationStack() {
+    navigator.reset({
+      index: 0,
+      routes: [{name: 'TaskList'}],
+    });
   }
 
   function clearForm() {
