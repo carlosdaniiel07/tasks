@@ -32,6 +32,7 @@ export default function Login() {
     api
       .post('/auth', auth)
       .then(res => {
+        clearForm();
         setToken(res.data.accessToken);
         navigator.navigate('TaskList');
       })
@@ -39,11 +40,17 @@ export default function Login() {
         const message =
           err.response.data.message || 'Ocorreu um erro ao fazer o login';
         showAlert('Erro', message);
+        clearForm();
       });
   }
 
   function navigateToRegister() {
     navigator.navigate('Register');
+  }
+
+  function clearForm() {
+    setLogin(null);
+    setPassword(null);
   }
 
   return (
