@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {useFocusEffect} from '@react-navigation/native';
+
 // import AsyncStorage from '@react-native-community/async-storage';
 
 import Icon from 'react-native-vector-icons/Feather';
@@ -73,24 +75,6 @@ export default function TaskList({navigation, route}) {
   const [showAddTask, setShowAddTask] = useState(false);
 
   useEffect(() => {
-    const loadTasks = async () => {
-      const {minDate, maxDate} = getDateRange();
-
-      const data = (await api.get('/tasks', {
-        headers: getAuthHeader(),
-        params: {
-          minDate,
-          maxDate,
-        },
-      })).data;
-
-      setTasks(data || []);
-    };
-
-    loadTasks();
-  }, []);
-
-  useEffect(() => {
     const filterTasks = () => {
       if (showDoneTasks) {
         setVisibleTasks(tasks);
@@ -106,6 +90,31 @@ export default function TaskList({navigation, route}) {
     filterTasks();
     persistTasks();
   }, [showDoneTasks, tasks]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // when the screen is focused
+      const loadTasks = async () => {
+        const {minDate, maxDate} = getDateRange();
+
+        const data = (await api.get('/tasks', {
+          headers: getAuthHeader(),
+          params: {
+            minDate,
+            maxDate,
+          },
+        })).data;
+
+        setTasks(data || []);
+      };
+
+      loadTasks();
+
+      return () => {
+        // when the screen is unfocused
+      };
+    }, []),
+  );
 
   function toggleFilter() {
     setShowDoneTasks(!showDoneTasks);
