@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Input from './../components/Input';
 import Button from './../components/Button';
@@ -24,6 +26,20 @@ export default function Login() {
 
   const navigator = useNavigation();
 
+  useEffect(() => {
+    const loadCredentials = async () => {
+      const data = await AsyncStorage.getItem('credentials');
+
+      if (data) {
+        const {user, pass} = JSON.parse(data);
+        setLogin(user);
+        setPassword(pass);
+      }
+    };
+
+    loadCredentials();
+  }, []);
+
   function tryLogin() {
     const auth = {
       loginOrEmail: login,
@@ -38,6 +54,7 @@ export default function Login() {
         clearForm();
         setToken(res.data.accessToken);
         setLoading(false);
+        saveCredentials(login, password);
 
         navigator.navigate('TaskList');
 
@@ -50,6 +67,7 @@ export default function Login() {
         setLoading(false);
         showAlert('Erro', message);
         clearForm();
+        clearCredentials();
       });
   }
 
@@ -67,6 +85,14 @@ export default function Login() {
   function clearForm() {
     setLogin(null);
     setPassword(null);
+  }
+
+  function saveCredentials(user, pass) {
+    AsyncStorage.setItem('credentials', JSON.stringify({user, pass}));
+  }
+
+  async function clearCredentials() {
+    await AsyncStorage.removeItem('credentials');
   }
 
   return (
