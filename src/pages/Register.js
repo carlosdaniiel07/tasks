@@ -11,6 +11,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 import Input from './../components/Input';
+import Button from './../components/Button';
 
 import {showAlert} from './../utils/utils';
 import {api} from './../services/api';
@@ -22,6 +23,7 @@ export default function Register() {
   const [login, setLogin] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigator = useNavigation();
 
@@ -33,16 +35,20 @@ export default function Register() {
       password,
     };
 
+    setLoading(true);
+
     api
       .post('/sign-up', data)
       .then(() => {
         showAlert('Sucesso', 'Cadastro realizado com sucesso!');
+        setLoading(false);
         navigator.goBack();
       })
       .catch(err => {
         const message =
           err.response.data.message || 'Ocorreu um erro ao realizar o cadastro';
 
+        setLoading(false);
         showAlert('Erro', message);
         clearForm();
       });
@@ -93,18 +99,13 @@ export default function Register() {
           />
         </View>
 
-        <TouchableOpacity
-          style={[
-            styles.registerButton,
-            !name || !login || !email || !password
-              ? styles.disabledRegisterButton
-              : {},
-          ]}
-          activeOpacity={0.9}
+        <Button
           disabled={!name || !login || !email || !password}
-          onPress={signUp}>
-          <Text style={styles.registerText}>Registrar</Text>
-        </TouchableOpacity>
+          onPress={signUp}
+          text="Registrar"
+          isLoading={loading}
+          style={{marginTop: 10}}
+        />
       </ImageBackground>
     </SafeAreaView>
   );
@@ -141,23 +142,5 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10,
     fontFamily: globalStyles.fontFamily,
-  },
-  registerButton: {
-    marginTop: 10,
-    backgroundColor: '#0366d6',
-    width: '60%',
-    height: 40,
-    padding: 8,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  disabledRegisterButton: {
-    backgroundColor: '#aaa',
-  },
-  registerText: {
-    color: globalStyles.colors.secondary,
-    fontFamily: globalStyles.fontFamily,
-    fontSize: 16,
   },
 });
