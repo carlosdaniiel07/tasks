@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View, Text, Image} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -13,10 +13,13 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 
 import userImage from './../assets/images/user.png';
+
 import Login from './pages/Login';
 import Register from './pages/Register';
 import TaskList from './pages/TaskList';
+
 import globalStyles from './styles/globalStyles';
+import {getUser} from './services/api';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -97,25 +100,16 @@ function TaskListDrawer() {
 
 function CustomDrawerContent(props) {
   const navigation = useNavigation();
-
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: '#eaeaea',
-    },
-    header: {
-      padding: 10,
-      alignItems: 'center',
-    },
-    headerImage: {
-      width: 50,
-      height: 50,
-    },
-  });
+  const user = getUser();
 
   return (
     <DrawerContentScrollView style={styles.container}>
       <View style={styles.header}>
         <Image style={styles.headerImage} source={userImage} />
+        <View style={styles.userDataContainer}>
+          <Text style={styles.userName}>{user.name}</Text>
+          <Text style={styles.userEmail}>{user.email}</Text>
+        </View>
       </View>
       <DrawerItemList {...props} />
       <DrawerItem
@@ -127,3 +121,29 @@ function CustomDrawerContent(props) {
     </DrawerContentScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#eaeaea',
+  },
+  header: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  headerImage: {
+    width: 50,
+    height: 50,
+  },
+  userDataContainer: {
+    marginLeft: 12,
+  },
+  userName: {
+    fontFamily: globalStyles.fontFamily,
+  },
+  userEmail: {
+    fontFamily: globalStyles.fontFamily,
+    color: globalStyles.colors.smallText,
+  },
+});
