@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Input from './../components/Input';
 import Button from './../components/Button';
 
-import {api, setToken} from './../services/api';
+import {api, setToken, setUser} from './../services/api';
 import {showAlert} from './../utils';
 import backgroundImage from './../../assets/images/login.jpg';
 import globalStyles from './../styles/globalStyles';
@@ -52,7 +52,10 @@ export default function Login() {
       .post('/auth', auth)
       .then(res => {
         clearForm();
+
         setToken(res.data.accessToken);
+        setUser(res.data.user);
+
         setLoading(false);
         saveCredentials(login, password);
 
