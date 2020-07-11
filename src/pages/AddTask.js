@@ -24,7 +24,7 @@ export default function AddTask(props) {
   function saveTask() {
     const task = {
       description: text,
-      estimateDate: toApiFormat(date.toLocaleDateString()),
+      estimateDate: date.toISOString(),
       notify: true,
     };
 
