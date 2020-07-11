@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
-  TouchableOpacity,
   Text,
   ImageBackground,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 import Input from './../components/Input';
+import Button from './../components/Button';
 
 import {api, setToken} from './../services/api';
 import {showAlert} from './../utils/utils';
@@ -20,6 +20,7 @@ import globalStyles from './../styles/globalStyles';
 export default function Login() {
   const [login, setLogin] = useState(null);
   const [password, setPassword] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigator = useNavigation();
 
@@ -29,18 +30,24 @@ export default function Login() {
       password,
     };
 
+    setLoading(true);
+
     api
       .post('/auth', auth)
       .then(res => {
         clearForm();
         setToken(res.data.accessToken);
+        setLoading(false);
 
         navigator.navigate('TaskList');
+
         clearNavigationStack();
       })
       .catch(err => {
         const message =
           err.response.data.message || 'Ocorreu um erro ao fazer o login';
+
+        setLoading(false);
         showAlert('Erro', message);
         clearForm();
       });
@@ -85,16 +92,13 @@ export default function Login() {
           />
         </View>
 
-        <TouchableOpacity
-          style={[
-            styles.loginButton,
-            !login || !password ? styles.disabledLoginButton : {},
-          ]}
-          activeOpacity={0.9}
+        <Button
           disabled={!login || !password}
-          onPress={tryLogin}>
-          <Text style={styles.loginText}>Login</Text>
-        </TouchableOpacity>
+          onPress={tryLogin}
+          text="Login"
+          isLoading={loading}
+          style={{marginTop: 10}}
+        />
 
         <Text style={styles.helpText} onPress={navigateToRegister}>
           Ainda não tenho uma conta
@@ -128,23 +132,8 @@ const styles = StyleSheet.create({
     marginTop: 24,
     width: '90%',
   },
-  loginButton: {
-    marginTop: 10,
-    backgroundColor: '#080',
-    width: '60%',
-    height: 40,
-    padding: 8,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   disabledLoginButton: {
     backgroundColor: '#aaa',
-  },
-  loginText: {
-    color: globalStyles.colors.secondary,
-    fontFamily: globalStyles.fontFamily,
-    fontSize: 16,
   },
   helpText: {
     marginTop: 16,
