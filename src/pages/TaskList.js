@@ -171,18 +171,23 @@ export default function TaskList({navigation, route}) {
   function getMaxDate() {
     switch (pageData.name) {
       case 'today':
-        return moment().toJSON();
+        return moment()
+          .endOf('day')
+          .toJSON();
       case 'tomorrow':
         return moment()
           .add(1, 'day')
+          .endOf('day')
           .toJSON();
       case 'week':
         return moment()
           .add(1, 'week')
+          .endOf('day')
           .toJSON();
       default:
         return moment()
           .add(1, 'month')
+          .endOf('day')
           .toJSON();
     }
   }
