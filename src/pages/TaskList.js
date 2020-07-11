@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 
 import {useFocusEffect} from '@react-navigation/native';
@@ -73,6 +74,7 @@ export default function TaskList({navigation, route}) {
   const [visibleTasks, setVisibleTasks] = useState(tasks);
   const [showDoneTasks, setShowDoneTasks] = useState(false);
   const [showAddTask, setShowAddTask] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const filterTasks = () => {
@@ -97,6 +99,8 @@ export default function TaskList({navigation, route}) {
       const loadTasks = async () => {
         const {minDate, maxDate} = getDateRange();
 
+        setLoading(true);
+
         const data = (await api.get('/tasks', {
           headers: getAuthHeader(),
           params: {
@@ -106,6 +110,7 @@ export default function TaskList({navigation, route}) {
         })).data;
 
         setTasks(data || []);
+        setLoading(false);
       };
 
       loadTasks();
@@ -229,14 +234,28 @@ export default function TaskList({navigation, route}) {
           </View>
         </ImageBackground>
         <View style={styles.tasksContainer}>
-          <FlatList
-            showsVerticalScrollIndicator={true}
-            data={visibleTasks}
-            keyExtractor={item => String(item.id)}
-            renderItem={({item}) => (
-              <Task item={item} markAsDone={markAsDone} onDelete={deleteTask} />
-            )}
-          />
+          {loading && (
+            <ActivityIndicator
+              style={styles.loadingIndicator}
+              color={pageData.theme}
+              size={40}
+            />
+          )}
+
+          {!loading && (
+            <FlatList
+              showsVerticalScrollIndicator={true}
+              data={visibleTasks}
+              keyExtractor={item => String(item.id)}
+              renderItem={({item}) => (
+                <Task
+                  item={item}
+                  markAsDone={markAsDone}
+                  onDelete={deleteTask}
+                />
+              )}
+            />
+          )}
         </View>
 
         <TouchableOpacity
@@ -280,6 +299,9 @@ const styles = StyleSheet.create({
   },
   tasksContainer: {
     flex: 7,
+  },
+  loadingIndicator: {
+    marginTop: '50%',
   },
   addButton: {
     position: 'absolute',
