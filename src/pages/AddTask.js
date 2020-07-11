@@ -13,6 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 
+import {toApiFormat} from './../utils';
 import globalStyles from './../styles/globalStyles';
 
 export default function AddTask(props) {
@@ -23,7 +24,7 @@ export default function AddTask(props) {
   function saveTask() {
     const task = {
       description: text,
-      estimateDate: date.toJSON(),
+      estimateDate: toApiFormat(date.toLocaleDateString()),
       notify: true,
     };
 

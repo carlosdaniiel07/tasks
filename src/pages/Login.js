@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -13,7 +13,7 @@ import Input from './../components/Input';
 import Button from './../components/Button';
 
 import {api, setToken} from './../services/api';
-import {showAlert} from './../utils/utils';
+import {showAlert} from './../utils';
 import backgroundImage from './../../assets/images/login.jpg';
 import globalStyles from './../styles/globalStyles';
 

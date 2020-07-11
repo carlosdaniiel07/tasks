@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   SafeAreaView,
   View,
-  TouchableOpacity,
   Text,
   ImageBackground,
   StyleSheet,
@@ -13,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import Input from './../components/Input';
 import Button from './../components/Button';
 
-import {showAlert} from './../utils/utils';
+import {showAlert} from './../utils';
 import {api} from './../services/api';
 import backgroundImage from './../../assets/images/login.jpg';
 import globalStyles from './../styles/globalStyles';
