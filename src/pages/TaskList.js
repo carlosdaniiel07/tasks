@@ -238,6 +238,26 @@ export default function TaskList({navigation, route}) {
             />
           )}
 
+          {!loading && !visibleTasks.length && (
+            <>
+              <Text style={styles.helpText}>Nenhuma tarefa pendente!</Text>
+              <View style={styles.helpContainer}>
+                <Text style={styles.helpSubtext}>Começe por </Text>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => setShowAddTask(true)}>
+                  <Text
+                    style={[
+                      styles.helpSubtext,
+                      {textDecorationLine: 'underline'},
+                    ]}>
+                    aqui
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+
           {!loading && (
             <FlatList
               showsVerticalScrollIndicator={true}
@@ -298,6 +318,20 @@ const styles = StyleSheet.create({
   },
   loadingIndicator: {
     marginTop: '50%',
+  },
+  helpContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  helpText: {
+    marginTop: '50%',
+    textAlign: 'center',
+    fontFamily: globalStyles.fontFamily,
+    fontSize: 18,
+  },
+  helpSubtext: {
+    fontFamily: globalStyles.fontFamily,
+    color: globalStyles.colors.smallText,
   },
   addButton: {
     position: 'absolute',
