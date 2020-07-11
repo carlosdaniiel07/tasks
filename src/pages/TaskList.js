@@ -97,14 +97,13 @@ export default function TaskList({navigation, route}) {
     React.useCallback(() => {
       // when the screen is focused
       const loadTasks = async () => {
-        const {minDate, maxDate} = getDateRange();
+        const maxDate = getMaxDate();
 
         setLoading(true);
 
         const data = (await api.get('/tasks', {
           headers: getAuthHeader(),
           params: {
-            minDate,
             maxDate,
           },
         })).data;
@@ -169,31 +168,23 @@ export default function TaskList({navigation, route}) {
     setShowAddTask(false);
   }
 
-  function getDateRange() {
-    const minDate = moment().toJSON();
-    let maxDate;
-
+  function getMaxDate() {
     switch (pageData.name) {
       case 'today':
-        maxDate = moment().toJSON();
-        break;
+        return moment().toJSON();
       case 'tomorrow':
-        maxDate = moment()
+        return moment()
           .add(1, 'day')
           .toJSON();
-        break;
       case 'week':
-        maxDate = moment()
+        return moment()
           .add(1, 'week')
           .toJSON();
-        break;
       default:
-        maxDate = moment()
+        return moment()
           .add(1, 'month')
           .toJSON();
     }
-
-    return {minDate, maxDate};
   }
 
   return (
