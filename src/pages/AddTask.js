@@ -16,51 +16,6 @@ import moment from 'moment';
 import globalStyles from './../styles/globalStyles';
 
 export default function AddTask(props) {
-  const styles = StyleSheet.create({
-    modal: {},
-    overlayContainer: {
-      flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    },
-    container: {
-      // flex: 1,
-      backgroundColor: '#fff',
-    },
-    header: {},
-    headerText: {
-      // backgroundColor: globalStyles.colors.theme.today,
-      backgroundColor: props.theme,
-      color: globalStyles.colors.secondary,
-      fontFamily: globalStyles.fontFamily,
-      padding: 10,
-      textAlign: 'center',
-    },
-    content: {
-      padding: 5,
-    },
-    input: {
-      fontFamily: globalStyles.fontFamily,
-    },
-    dateText: {
-      fontFamily: globalStyles.fontFamily,
-      color: globalStyles.colors.smallText,
-      textAlign: 'center',
-    },
-    buttons: {
-      marginTop: 12,
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-    },
-    button: {
-      margin: 8,
-    },
-    buttonText: {
-      fontFamily: globalStyles.fontFamily,
-      // color: globalStyles.colors.theme.today,
-      color: props.theme,
-    },
-  });
-
   const [text, setText] = useState(null);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -120,7 +75,9 @@ export default function AddTask(props) {
 
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Nova tarefa</Text>
+          <Text style={[styles.headerText, {backgroundColor: props.theme}]}>
+            Nova tarefa
+          </Text>
         </View>
 
         <View style={styles.content}>
@@ -138,7 +95,9 @@ export default function AddTask(props) {
               style={styles.button}
               activeOpacity={0.5}
               onPress={props.onCancel}>
-              <Text style={styles.buttonText}>Cancelar</Text>
+              <Text style={[styles.buttonText, {color: props.theme}]}>
+                Cancelar
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -146,7 +105,9 @@ export default function AddTask(props) {
               activeOpacity={0.5}
               onPress={saveTask}
               disabled={text === null || text.trim().length === 0}>
-              <Text style={styles.buttonText}>Salvar</Text>
+              <Text style={[styles.buttonText, {color: props.theme}]}>
+                Salvar
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -158,3 +119,44 @@ export default function AddTask(props) {
     </Modal>
   );
 }
+
+const styles = StyleSheet.create({
+  modal: {},
+  overlayContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  container: {
+    // flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {},
+  headerText: {
+    color: globalStyles.colors.secondary,
+    fontFamily: globalStyles.fontFamily,
+    padding: 10,
+    textAlign: 'center',
+  },
+  content: {
+    padding: 5,
+  },
+  input: {
+    fontFamily: globalStyles.fontFamily,
+  },
+  dateText: {
+    fontFamily: globalStyles.fontFamily,
+    color: globalStyles.colors.smallText,
+    textAlign: 'center',
+  },
+  buttons: {
+    marginTop: 12,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  button: {
+    margin: 8,
+  },
+  buttonText: {
+    fontFamily: globalStyles.fontFamily,
+  },
+});
