@@ -23,6 +23,7 @@ export default function Login() {
   const [login, setLogin] = useState(null);
   const [password, setPassword] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [autoLogin, setAutoLogin] = useState(false);
 
   const navigator = useNavigation();
 
@@ -32,13 +33,22 @@ export default function Login() {
 
       if (data) {
         const {user, pass} = JSON.parse(data);
+
         setLogin(user);
         setPassword(pass);
+
+        setAutoLogin(true);
       }
     };
 
     loadCredentials();
   }, []);
+
+  useEffect(() => {
+    if (autoLogin) {
+      tryLogin();
+    }
+  }, [autoLogin]);
 
   function tryLogin() {
     const auth = {
