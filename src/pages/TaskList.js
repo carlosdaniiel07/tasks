@@ -211,14 +211,14 @@ export default function TaskList({navigation, route}) {
               activeOpacity={0.7}>
               <Icon
                 name="menu"
-                size={20}
+                size={24}
                 color={globalStyles.colors.secondary}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={toggleFilter} activeOpacity={0.7}>
               <Icon
                 name={showDoneTasks ? 'eye' : 'eye-off'}
-                size={20}
+                size={24}
                 color={globalStyles.colors.secondary}
               />
             </TouchableOpacity>
