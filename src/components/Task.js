@@ -43,19 +43,30 @@ export default function Task(props) {
       : item.description;
   }
 
-  function getSwipeableContent() {
-    return (
-      <View style={styles.swipeableContent}>
-        <Icon name="trash-alt" size={20} color="#fff" />
-        <Text style={styles.swipeableText}>Excluir</Text>
-      </View>
-    );
+  function getSwipeableContent(side) {
+    if (side === 'left') {
+      return (
+        <View style={[styles.swipeableContent, styles.leftSwipeableContent]}>
+          <Icon name="trash-alt" size={20} color="#fff" />
+          <Text style={styles.swipeableText}>Excluir</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={[styles.swipeableContent, styles.rightSwipeableContent]}>
+          <Icon name="check" size={20} color="#fff" />
+          <Text style={styles.swipeableText}>Concluir</Text>
+        </View>
+      );
+    }
   }
 
   return (
     <Swipeable
-      renderLeftActions={getSwipeableContent}
-      onSwipeableLeftOpen={() => props.onDelete(item)}>
+      renderLeftActions={() => getSwipeableContent('left')}
+      renderRightActions={() => getSwipeableContent('right')}
+      onSwipeableLeftOpen={() => props.onDelete(item)}
+      onSwipeableRightOpen={() => props.markAsDone(item)}>
       <View style={styles.container}>
         <View>
           <Text style={[styles.dataText, getTextDecoration()]}>
@@ -103,9 +114,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     paddingHorizontal: 10,
+    alignItems: 'center',
+  },
+  leftSwipeableContent: {
     backgroundColor: '#dc1515',
     justifyContent: 'flex-start',
-    alignItems: 'center',
+  },
+  rightSwipeableContent: {
+    backgroundColor: '#4d7031',
+    justifyContent: 'flex-end',
   },
   swipeableText: {
     fontFamily: globalStyles.fontFamily,
