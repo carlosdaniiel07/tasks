@@ -34,7 +34,11 @@ const itemStyles = StyleSheet.create({
 export default function Routes() {
   return (
     <Stack.Navigator initialRouteName="Login" headerMode="none">
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        initialParams={{logout: false}}
+      />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="TaskList" component={TaskListDrawer} />
     </Stack.Navigator>
@@ -116,7 +120,7 @@ function CustomDrawerContent(props) {
         label="Logout"
         labelStyle={itemStyles.item}
         icon={() => <Icon name="log-out" size={20} />}
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => navigation.navigate('Login', {logout: true})}
       />
     </DrawerContentScrollView>
   );

@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -26,18 +26,23 @@ export default function Login() {
   const [autoLogin, setAutoLogin] = useState(false);
 
   const navigator = useNavigation();
+  const route = useRoute();
+
+  const {logout} = route.params;
 
   useEffect(() => {
     const loadCredentials = async () => {
-      const data = await AsyncStorage.getItem('credentials');
+      if (!logout) {
+        const data = await AsyncStorage.getItem('credentials');
 
-      if (data) {
-        const {user, pass} = JSON.parse(data);
+        if (data) {
+          const {user, pass} = JSON.parse(data);
 
-        setLogin(user);
-        setPassword(pass);
+          setLogin(user);
+          setPassword(pass);
 
-        setAutoLogin(true);
+          setAutoLogin(true);
+        }
       }
     };
 
