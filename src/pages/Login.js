@@ -15,6 +15,8 @@ import Input from './../components/Input';
 import Button from './../components/Button';
 
 import {api, setToken, setUser} from './../services/api';
+import {initFirebaseService} from './../services/firebase';
+
 import {showAlert} from './../utils';
 import backgroundImage from './../../assets/images/login.jpg';
 import globalStyles from './../styles/globalStyles';
@@ -55,10 +57,13 @@ export default function Login() {
     }
   }, [autoLogin]);
 
-  function tryLogin() {
+  async function tryLogin() {
+    const deviceToken = await initFirebaseService();
+
     const auth = {
       loginOrEmail: login,
       password,
+      deviceToken,
     };
 
     setLoading(true);
